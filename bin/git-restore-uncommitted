@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+if test -n "$(git status --porcelain)"; then
+  echo "Error: Working directory not clean."
+elif test "$(git log -2 --pretty='format:%s')" = "WIP: unstaged changes
+WIP: staged changes"; then
+  echo "Restoring uncommitted changes."
+  git log -1 --pretty='format:HEAD was at %h %s'
+  unstaged=$(git rev-parse HEAD)
+  staged=$(git rev-parse HEAD~1)
+  head=$(git rev-parse HEAD~2)
+
+  git reset --hard "$head"
+  git restore --staged --source "$staged" .
+  git restore --worktree --source "$unstaged" .
+  echo "Uncommitted changes restored."
+else
+  echo "No uncommitted changes to restore."
+fi
