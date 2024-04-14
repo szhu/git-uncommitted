@@ -1,17 +1,31 @@
-# git-safeswitch
+# git uncommitted
 
-Do you work on multiple features at a time, and need a different index and working directory for each feature branch?
+**Like `git stash`, but a little nicer.**
 
-You shouldn't be forced to commit or stash your changes just to switch branches. This tool can help.
+This tool works like `git stash`, except with these improvements:
+
+- `git uncommitted` saves changes onto your current branch, so there is guaranteed to be no merge conflicts when restoring the changes as uncommitted changes.
+- `git uncommitted` saves changes per-branch, whereas`git stash` is global.`git uncommitted` is a better choice for when you want to stash some changes that are specific to the current branch.
+- `git uncommitted` saves your untracked files, tracked changes, and staged changes, and remembers which is which. This means that when you restore your changes, your workspace is exactly like you left it.`git stash` can only save all your uncommitted changes together.
 
 ## Installation
 
 Super simple:
 
-1\. Clone this repo\
+1\. Clone this repo
 2\. Add `bin` to your `$PATH`
 
 ## Basic Usage
+
+`git uncommitted backup` saves the state of your index and working directory as two commits on the current branch. Use it like `git stash`.
+
+`git uncommitted restore` does the inverse; it restores these commits to your index and working directory. Use it like `git stash pop`.
+
+That's it!
+
+## Advanced Usage: `git safe`
+
+`git safe` is a simple shortcut that can can help you automatically backup and restore changes when switching branches.
 
 To switch branches, you normally run:
 
@@ -28,8 +42,6 @@ git safe checkout <branch>
 That's it!
 
 This will save the state of your index and working directory to the current branch, checkout the new branch, and then restore the state of the index and working directory of the new branch.
-
-## Advanced Usage
 
 `git safe` can be used with any `git` command that causes the branch to change, like:
 
@@ -71,11 +83,11 @@ All of these will produce the same result.
 
 This repo contains a few scripts:
 
-`git backup-uncommitted` saves the state of your index and working directory as two commits on the current branch.
+`git uncommitted backup` saves the state of your index and working directory as two commits on the current branch.
 
-`git restore-uncommitted` does the inverse; it restores these commits to your index and working directory.
+`git uncommitted restore` does the inverse; it restores these commits to your index and working directory.
 
-`git safe` is a convenience script that runs `git backup-uncommitted`, a `git` command of your choice, and then `git restore-uncommitted` — all in one step.
+`git safe` is a convenience script that runs `git uncommitted backup`, a `git` command of your choice, and then `git uncommitted restore` — all in one step.
 
 ## Contributing
 
