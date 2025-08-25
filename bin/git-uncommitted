@@ -22,7 +22,7 @@ restore)
   elif test "$(git log -2 --pretty='format:%s')" = "WIP: unstaged changes
 WIP: staged changes"; then
     echo "Restoring uncommitted changes."
-    git log -1 --pretty='format:HEAD was at %h %s'
+    GIT_PAGER='' git log -1 --pretty='format:HEAD was at %h %s'
     unstaged=$(git rev-parse HEAD)
     staged=$(git rev-parse HEAD~1)
     head=$(git rev-parse HEAD~2)
